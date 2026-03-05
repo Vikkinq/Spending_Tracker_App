@@ -12,7 +12,11 @@ class ExpenseController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-          return Inertia::render("Spending/SpendingIndex");
+        $expense = Expense::all();
+
+        return Inertia::render("Spending/SpendingIndex", [
+            'expenses' => $expense,
+        ]);
     }
 
     /**
@@ -20,7 +24,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Spending/SpendingCreate');
     }
 
     /**

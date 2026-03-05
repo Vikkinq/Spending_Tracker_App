@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Expense extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
-    public $incrementing = false; // UUID is not auto-increment
-    protected $keyType = 'string'; // primary key is a string
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'user_id',
@@ -22,16 +22,7 @@ class Expense extends Model
         'notes',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (!$model->id) {
-                $model->id = (string) Str::uuid(); // generate UUID v4
-            }
-        });
-    }
-
-    // Optional: relationships
+    // relationships
     public function user()
     {
         return $this->belongsTo(User::class);

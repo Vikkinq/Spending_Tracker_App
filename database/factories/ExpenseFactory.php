@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Category;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expense>
  */
@@ -17,6 +18,8 @@ class ExpenseFactory extends Factory
     public function definition(): array
 {
     return [
+        'user_id' => 1,
+        'category_id' => Category::inRandomOrder()->first()->id,
         'title' => fake()->sentence(3),
         'amount' => fake()->randomFloat(1, 5, 500),
         'spent_on' => fake()->date(),

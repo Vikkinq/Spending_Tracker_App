@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\ExpenseSeeder;
+use Database\Seeders\CategorySeeder;
+
 use App\Models\Expense;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,6 +26,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            CategorySeeder::class,
             ExpenseSeeder::class,
         ]);
     }

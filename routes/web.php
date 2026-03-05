@@ -27,4 +27,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-route::get('/spending', [ExpenseController::class,'index'])->name('expenses.index');
+route::get('/spending', [ExpenseController::class,'index'])->middleware(['auth', 'verified'])->name('expenses.index');
+Route::get('/spending/create', [ExpenseController::class, 'create'])->middleware(['auth', 'verified'])->name('expenses.create');
