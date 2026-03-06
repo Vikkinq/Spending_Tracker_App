@@ -1,6 +1,11 @@
 <script setup>
     import { useForm, Link } from '@inertiajs/vue3';
 
+    defineProps({
+        user: Array,
+        categories: Array,
+    })
+
     const form = useForm({
         title: '',
         amount: '',
@@ -18,6 +23,7 @@
 
 <template>
     <div class="min-h-screen bg-gray-50 py-12 px-4">
+        <h1>{{ user.name }}</h1>
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
             <h1 class="text-3xl font-bold text-center mb-8 text-gray-900">Create Expenditure</h1>
             <form @submit.prevent="onSubmit" class="space-y-5">
@@ -36,11 +42,9 @@
                 <!-- Category -->
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select v-model="form.category" id="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-white">
-                        <option value="food">Food</option>
-                        <option value="misc">Miscellaneous</option>
-                        <option value="travel">Travel</option>
-                        <option value="entertainment">Entertainment</option>
+                    <select v-model="form.category_name" class="input">
+                        <option disabled value="">Select a Category</option>
+                        <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
                     </select>
                 </div>
 

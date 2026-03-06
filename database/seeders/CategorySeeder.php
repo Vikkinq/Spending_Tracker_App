@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
         $categories = ['Food', 'Transport', 'Bills', 'Entertainment', 'Health', 'Miscellaneous'];
 
         foreach ($categories as $name) {
-            Category::create(['name' => $name, 'user_id' => 1]); // assign to first user
+            Category::create(['name' => $name, 'user_id' => 2]); // assign to first user
         }
     }
 }

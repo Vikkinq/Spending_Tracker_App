@@ -29,3 +29,4 @@ require __DIR__.'/auth.php';
 
 route::get('/spending', [ExpenseController::class,'index'])->middleware(['auth', 'verified'])->name('expenses.index');
 Route::get('/spending/create', [ExpenseController::class, 'create'])->middleware(['auth', 'verified'])->name('expenses.create');
+Route::get('/spending/{id}/edit', [ExpenseController::class, 'edit'])->middleware(['auth', 'verified'])->name('expenses.edit');
