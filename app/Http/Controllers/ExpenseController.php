@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use App\Http\Requests\StoreExpenseRequest;
+
 class ExpenseController extends Controller
 {
     /**
@@ -33,16 +35,35 @@ class ExpenseController extends Controller
                                     ->pluck('name'); 
         return Inertia::render('Spending/SpendingCreate', [
             'user' => $user,
-            'userCategories' => $userCategories, 
+            'categories' => $userCategories, 
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreExpenseRequest $request)
     {
-        //
+        $user = Auth::user();
+
+        $validatedData = $request->validated();
+
+        $category = Category::firstOrCreate([
+            'name' => $validatedData['category'],
+            'user_id' => $user->id,
+        ]);
+
+        $newExpense = Expense::create([
+            'title'=> $validatedData['title'],
+            'amount'=> $validatedData['amount'],
+            'category_id'=> $category->id,
+            'user_id'=> $user->id,
+            'notes'=> $validatedData['notes'],
+            'spent_on'=> $validatedData['spent_on'],
+        ]);
+
+        return redirect()->route('expenses.index');
+
     }
 
     /**
@@ -50,7 +71,9 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
-        //
+        return Inertia::render('Spending/SpendingShow', [
+            'expense'=> $expense
+        ]);
     }
 
     /**
@@ -58,7 +81,9 @@ class ExpenseController extends Controller
      */
     public function edit(Expense $expense)
     {
-        return Inertia::render('Spending/SpendingEdit');
+        return Inertia::render('Spending/SpendingEdit', [
+            'expense'=> $expense,
+        ]);
     }
 
     /**
@@ -74,6 +99,8 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        //
+        $deletedPost = $expense->delete();
+
+        return redirect()->route('expenses.index');
     }
 }

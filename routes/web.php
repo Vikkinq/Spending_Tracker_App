@@ -29,4 +29,8 @@ require __DIR__.'/auth.php';
 
 route::get('/spending', [ExpenseController::class,'index'])->middleware(['auth', 'verified'])->name('expenses.index');
 Route::get('/spending/create', [ExpenseController::class, 'create'])->middleware(['auth', 'verified'])->name('expenses.create');
-Route::get('/spending/{id}/edit', [ExpenseController::class, 'edit'])->middleware(['auth', 'verified'])->name('expenses.edit');
+Route::post('/spending', [ExpenseController::class,'store'])->middleware(['auth', 'verified'])->name('expenses.store');
+Route::get('/spending/{expense}/edit', [ExpenseController::class, 'edit'])->middleware(['auth', 'verified'])->name('expenses.edit');
+Route::put('/spending/{expense}/update', [ExpenseController::class,'update'])->middleware(['auth', 'verified']);
+Route::get('/spending/{expense}', [ExpenseController::class,'show'])->middleware(['auth', 'verified'])->name('expense.show');
+Route::delete('/spending/{expense}/delete', [ExpenseController::class,'destroy'])->middleware(['auth', 'verified']);

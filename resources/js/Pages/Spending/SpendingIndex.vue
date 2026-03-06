@@ -1,11 +1,30 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3';
+    import { Link, router } from '@inertiajs/vue3';
 
 
     defineProps({
         expenses: Array,
-        user: Array,
+        user: Object,
     })
+
+    const onEdit = (id) => {
+        try {
+            console.log(`ID is: ${id}`);
+            router.get(`/spending/${id}/edit`);
+        } catch(err){
+            console.log('Expenses doesnt Exist')
+        }
+    }
+
+    const onDelete = (id) => {
+        console.log(`ID ${id} will be Deleted?`);
+        router.delete(`/spending/${id}/delete`);
+    }
+
+    const onShow = (id) => {
+        console.log(`ID ${id} will Show`);
+        router.get(`/spending/${id}`);
+    }
 
 </script>
 
@@ -47,11 +66,12 @@
                 </thead>
 
                 <!-- Table Body -->
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-100 ">
                     <tr
                         v-for="expense in expenses"
                         :key="expense.id"
                         class="hover:bg-gray-50 transition hover:cursor-pointer"
+                        
                     >
                         <td class="px-6 py-4 font-medium text-gray-800">
                             {{ expense.title }}
@@ -79,13 +99,16 @@
 
                         <!-- Action Column -->
                         <td class="px-6 py-4 text-right space-x-2">
+                            <button @click="onShow(expense.id)" class="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600">Show</button>
                             <button
+                                @click="onEdit(expense.id)"
                                 class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
                             >
                                 Edit
                             </button>
 
                             <button
+                                @click="onDelete(expense.id)"
                                 class="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
                             >
                                 Delete

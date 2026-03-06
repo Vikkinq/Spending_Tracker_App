@@ -6,6 +6,6 @@
 
 <template>
     <div>
-        <h1>Edit Spending --- {{ expense.title }}</h1>
+        <h1>Spending Show -- {{ expense.title }}</h1>
     </div>
 </template>
