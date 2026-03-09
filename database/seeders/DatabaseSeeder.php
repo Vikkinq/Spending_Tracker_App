@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Database\Seeders\ExpenseSeeder;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\PlanSeeder;
+use Database\Seeders\UserSeeder;
 
 use App\Models\Expense;
 use App\Models\User;
@@ -26,6 +28,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            PlanSeeder::class,
+            UserSeeder::class,
             CategorySeeder::class,
             ExpenseSeeder::class,
         ]);

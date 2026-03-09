@@ -2,39 +2,41 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Expense;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable, HasUuids;
+
+    // Tell Laravel the primary key is NOT auto-incrementing
+    public $incrementing = false;
+
+    // Primary key type is string
+    protected $keyType = 'string';
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password', 'plan_id',
     ];
 
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
-    protected function casts(): array
+    // Relationships
+    public function plan()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Plan::class);
     }
 
-    // RELATIONSHIP
-    public function expenses(): HasMany
+    public function expenses()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 }

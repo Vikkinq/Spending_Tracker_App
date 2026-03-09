@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -16,8 +15,14 @@ class CategorySeeder extends Seeder
     {
         $categories = ['Food', 'Transport', 'Bills', 'Entertainment', 'Health', 'Miscellaneous'];
 
+        // Get the first user
+        $firstUser = User::first();
+
         foreach ($categories as $name) {
-            Category::create(['name' => $name, 'user_id' => 2]); // assign to first user
+            Category::create([
+                'name' => $name,
+                'user_id' => $firstUser->id, // assign actual UUID
+            ]);
         }
     }
 }
