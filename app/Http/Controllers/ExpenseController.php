@@ -9,12 +9,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\UpdateExpenseRequest;
 
 class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Index 
     public function index(){
         $user = Auth::user();
         $expenses = Auth::user()->expenses()->with('category')->latest()->get();
@@ -25,9 +24,7 @@ class ExpenseController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Create Form
     public function create(){
         $user = Auth::user();
 
@@ -39,9 +36,7 @@ class ExpenseController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Create => Store Data
     public function store(StoreExpenseRequest $request)
     {
         $user = Auth::user();
@@ -66,9 +61,7 @@ class ExpenseController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Show Page
     public function show(Expense $expense)
     {
         return Inertia::render('Spending/SpendingShow', [
@@ -76,27 +69,45 @@ class ExpenseController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Edit Form Page
     public function edit(Expense $expense)
     {
+        $user = Auth::user();
+        $userCategories = Category::where('user_id', $user->id)->pluck('name'); 
+
         return Inertia::render('Spending/SpendingEdit', [
             'expense'=> $expense,
+            'user'=> $user,
+            'categories'=> $userCategories,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Expense $expense)
+    // Edit => Update Data
+    public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        //
+        $user = Auth::user();
+
+        abort_if($expense->user_id != $user->id,403);
+
+        $validatedData = $request->validated();
+
+        $category = Category::firstOrCreate([
+            'name' => $validatedData['category'],
+            'user_id' => $user->id,
+        ]);
+
+        $expense->update([
+            'title'=> $validatedData['title'],
+            'amount'=> $validatedData['amount'],
+            'category_id'=> $category->id,
+            'notes'=> $validatedData['notes'],
+            'spent_on'=> $validatedData['spent_on'],
+        ]);
+
+        return redirect()->route('expenses.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Delete Data
     public function destroy(Expense $expense)
     {
         $deletedPost = $expense->delete();

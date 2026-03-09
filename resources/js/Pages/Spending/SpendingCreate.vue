@@ -64,7 +64,7 @@
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
                     <select v-model="form.category" class="input">
-                        <option disabled value="">Select a Category</option>
+                        <option disabled value="" selected="">Select a Category</option>
                         <option v-for="cat in allCategories" :key="cat" :value="cat">{{ cat }}</option>
                     </select>
                 </div>

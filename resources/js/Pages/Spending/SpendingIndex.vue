@@ -61,6 +61,7 @@
                         <th class="px-6 py-3">Spent On</th>
                         <th class="px-6 py-3">Notes</th>
                         <th class="px-6 py-3">Created</th>
+                        <th class="px-6 py-3">Updated</th>
                         <th class="px-6 py-3 text-right">Action</th>
                     </tr>
                 </thead>
@@ -95,6 +96,10 @@
 
                         <td class="px-6 py-4 text-gray-500 text-sm">
                             {{ expense.created_at }}
+                        </td>
+
+                        <td class="px-6 py-4 text-gray-500 text-sm">
+                            {{ expense.updated_at }}
                         </td>
 
                         <!-- Action Column -->
