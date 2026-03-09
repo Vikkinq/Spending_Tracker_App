@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ExpensesTable from "@/Components/Expenses/ExpensesTable.vue";
+import ExpensesTable from "@/Components/Expenses/ExpenseTable/ExpensesTable.vue";
 import { router } from "@inertiajs/vue3";
 
 defineOptions({
@@ -32,7 +32,6 @@ const onShow = (id) => {
 };
 </script>
 
-```vue
 <template>
     <div class="min-h-screen bg-gray-50 p-8">
         <!-- Header -->
@@ -40,6 +39,38 @@ const onShow = (id) => {
             <h1 class="text-2xl font-semibold text-gray-800">
                 Welcome, {{ user.name }}
             </h1>
+
+            <!-- Search and Sort Controls -->
+            <div class="flex items-center space-x-4">
+                <!-- Search -->
+                <div class="relative">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        class="pl-10 pr-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                        v-model="searchQuery"
+                    />
+                    <span
+                        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    >
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+
+                <!-- Sort -->
+                <div>
+                    <select
+                        v-model="sortOption"
+                        class="border rounded-lg py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                        <option value="" selected>All</option>
+                        <option value="dateAsc">Date ↑</option>
+                        <option value="dateDesc">Date ↓</option>
+                        <option value="abcAsc">ABC ↑</option>
+                        <option value="abcDesc">ABC ↓</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <!-- Table Container -->
@@ -53,6 +84,41 @@ const onShow = (id) => {
                 :onShow="onShow"
             />
         </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center items-center mt-4 space-x-2">
+            <!-- Previous Button -->
+            <button
+                :disabled="currentPage === 1"
+                @click="prevPage"
+                class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            >
+                <i class="fas fa-angle-left"></i>
+            </button>
+
+            <!-- Page Numbers -->
+            <button
+                v-for="page in totalPages"
+                :key="page"
+                @click="goToPage(page)"
+                :class="[
+                    'px-3 py-1 rounded-lg border',
+                    currentPage === page
+                        ? 'bg-indigo-500 text-white border-indigo-500'
+                        : 'bg-white text-gray-700 hover:bg-gray-100',
+                ]"
+            >
+                {{ page }}
+            </button>
+
+            <!-- Next Button -->
+            <button
+                :disabled="currentPage === totalPages"
+                @click="nextPage"
+                class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            >
+                <i class="fas fa-angle-right"></i>
+            </button>
+        </div>
     </div>
 </template>
-```
