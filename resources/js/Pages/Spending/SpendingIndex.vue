@@ -2,6 +2,11 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link, router } from "@inertiajs/vue3";
 
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
 defineOptions({
     layout: AppLayout,
 });
@@ -10,6 +15,18 @@ defineProps({
     expenses: Array,
     user: Object,
 });
+
+const formatDate = (dateString) => {
+    return dayjs(dateString).format("MMM DD, YYYY");
+};
+
+const formatDateTime = (dateString) => {
+    return dayjs(dateString).format("MMM DD, YYYY HH:mm");
+};
+
+const timeAgo = (date) => {
+    return dayjs(date).fromNow();
+};
 
 const onEdit = (id) => {
     try {
@@ -40,12 +57,12 @@ const onShow = (id) => {
                 Welcome, {{ user.name }}
             </h1>
 
-            <Link
+            <!-- <Link
                 :href="route('expenses.create')"
                 class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
             >
                 + Create Expense
-            </Link>
+            </Link> -->
         </div>
 
         <!-- Table Container -->
@@ -91,7 +108,7 @@ const onShow = (id) => {
                         </td>
 
                         <td class="px-6 py-4 text-gray-600 font-bold">
-                            {{ expense.spent_on }}
+                            {{ formatDate(expense.spent_on) }}
                         </td>
 
                         <td class="px-6 py-4 text-gray-600">
@@ -99,11 +116,11 @@ const onShow = (id) => {
                         </td>
 
                         <td class="px-6 py-4 text-gray-500 text-sm">
-                            {{ expense.created_at }}
+                            {{ formatDateTime(expense.created_at) }}
                         </td>
 
                         <td class="px-6 py-4 text-gray-500 text-sm">
-                            {{ expense.updated_at }}
+                            {{ timeAgo(expense.updated_at) }}
                         </td>
 
                         <!-- Action Column -->
@@ -133,7 +150,7 @@ const onShow = (id) => {
             </table>
         </div>
 
-        <!-- Footer -->
+        <!-- Footer
         <div class="mt-6">
             <Link
                 :href="route('logout')"
@@ -142,7 +159,7 @@ const onShow = (id) => {
             >
                 Logout
             </Link>
-        </div>
+        </div> -->
     </div>
 </template>
 ```

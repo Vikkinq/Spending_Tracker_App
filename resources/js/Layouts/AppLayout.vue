@@ -7,7 +7,7 @@
         <main class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Bar -->
             <header
-                class="h-16 border-b border-gray-200 bg-white flex items-center px-6 flex-shrink-0"
+                class="h-16 border-b border-gray-200 bg-white flex items-center px-8 flex-shrink-0"
             >
                 <div class="w-full flex items-center justify-between">
                     <!-- Mobile Menu Toggle -->
@@ -41,7 +41,7 @@
                                 <div
                                     class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-700 text-white font-bold text-sm flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
                                 >
-                                    A
+                                    {{ user.name[0].toUpperCase() }}
                                 </div>
                             </button>
 
@@ -88,4 +88,9 @@
 
 <script setup>
 import Sidebar from "@/Components/Navigations/Sidebar.vue";
+import { usePage } from "@inertiajs/vue3";
+
+const { props } = usePage();
+
+const user = props.auth.user;
 </script>
