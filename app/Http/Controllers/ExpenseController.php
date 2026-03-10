@@ -11,16 +11,24 @@ use Inertia\Inertia;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 
-class ExpenseController extends Controller
-{
+class ExpenseController extends Controller {
+
     // Index 
-    public function index(){
+    public function index(Request $request){
         $user = Auth::user();
-        $expenses = Auth::user()->expenses()->with('category')->latest()->get();
+        $expenses = $user->expenses()->with('category')->latest();
+
+        $paginatedExpenses = $expenses->paginate(10)->withQueryString();
 
         return Inertia::render('Spending/SpendingIndex', [
-            'expenses' => $expenses,
+            'expenses' => $paginatedExpenses->items(),
             'user' => $user,
+            'pagination' => [
+                'total' => $paginatedExpenses->total(),
+                'per_page' => $paginatedExpenses->perPage(),
+                'current_page' => $paginatedExpenses->currentPage(),
+                'last_page' => $paginatedExpenses->lastPage(),
+            ]
         ]);
     }
 
@@ -37,8 +45,7 @@ class ExpenseController extends Controller
     }
 
     // Create => Store Data
-    public function store(StoreExpenseRequest $request)
-    {
+    public function store(StoreExpenseRequest $request){
         $user = Auth::user();
 
         $validatedData = $request->validated();
@@ -62,17 +69,20 @@ class ExpenseController extends Controller
     }
 
     // Show Page
-    public function show(Expense $expense)
-    {
+    public function show(Expense $expense){
+        $user = Auth::user();
+        abort_if($expense->user_id != $user->id,403);
+
         return Inertia::render('Spending/SpendingShow', [
             'expense'=> $expense
         ]);
     }
 
     // Edit Form Page
-    public function edit(Expense $expense)
-    {
+    public function edit(Expense $expense){
         $user = Auth::user();
+        abort_if($expense->user_id != $user->id,403);
+        
         $userCategories = Category::where('user_id', $user->id)->pluck('name'); 
 
         return Inertia::render('Spending/SpendingEdit', [
@@ -83,10 +93,8 @@ class ExpenseController extends Controller
     }
 
     // Edit => Update Data
-    public function update(UpdateExpenseRequest $request, Expense $expense)
-    {
+    public function update(UpdateExpenseRequest $request, Expense $expense){
         $user = Auth::user();
-
         abort_if($expense->user_id != $user->id,403);
 
         $validatedData = $request->validated();
@@ -108,10 +116,11 @@ class ExpenseController extends Controller
     }
 
     // Delete Data
-    public function destroy(Expense $expense)
-    {
-        $deletedPost = $expense->delete();
+    public function destroy(Expense $expense){
+        $user = Auth::user();
+        abort_if($expense->user_id != $user->id,403);
 
+        $deletedPost = $expense->delete();
         return redirect()->route('expenses.index');
     }
 }

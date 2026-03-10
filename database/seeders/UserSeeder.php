@@ -14,14 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get the Free plan
         $freePlan = Plan::where('slug', 'free')->first();
 
-        // Create a demo user
         User::create([
             'name' => 'Symon',
             'email' => 'symon@gmail.com',
-            'password' => Hash::make('symon2312'), // default password
+            'password' => Hash::make('symon2312'), 
             'plan_id' => $freePlan->id,
         ]);
     }

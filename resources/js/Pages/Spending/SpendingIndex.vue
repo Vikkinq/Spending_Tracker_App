@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ExpensesTable from "@/Components/Expenses/ExpenseTable/ExpensesTable.vue";
+import Pagination from "@/Components/Global/Pagination.vue";
 import { router } from "@inertiajs/vue3";
 
 defineOptions({
@@ -8,8 +9,12 @@ defineOptions({
 });
 
 defineProps({
-    expenses: Array,
+    expenses: {
+        type: Object,
+        required: true,
+    },
     user: Object,
+    pagination: Object,
 });
 
 const onEdit = (id) => {
@@ -22,13 +27,23 @@ const onEdit = (id) => {
 };
 
 const onDelete = (id) => {
-    console.log(`ID ${id} will be Deleted?`);
-    router.delete(`/spending/${id}/delete`);
+    try {
+        if (confirm("Are you sure you want to delete this?")) {
+            console.log(`ID ${id} will be Deleted?`);
+            router.delete(`/spending/${id}/delete`);
+        }
+    } catch (err) {
+        console.log("Error: ", err);
+    }
 };
 
 const onShow = (id) => {
-    console.log(`ID ${id} will Show`);
-    router.get(`/spending/${id}`);
+    try {
+        console.log(`ID ${id} will Show`);
+        router.get(`/spending/${id}`);
+    } catch (err) {
+        console.log("Error: ", err);
+    }
 };
 </script>
 
@@ -98,7 +113,7 @@ const onShow = (id) => {
 
             <!-- Page Numbers -->
             <button
-                v-for="page in totalPages"
+                v-for="page in pagination.total"
                 :key="page"
                 @click="goToPage(page)"
                 :class="[

@@ -46,7 +46,7 @@ const allCategories = computed(() => {
         <h1>{{ user.name }}</h1>
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
             <h1 class="text-3xl font-bold text-center mb-8 text-gray-900">
-                Create Expenditure
+                Create Spendie
             </h1>
             <form @submit.prevent="onSubmit" class="space-y-5">
                 <!-- Title -->
