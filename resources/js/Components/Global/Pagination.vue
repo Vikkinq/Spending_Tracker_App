@@ -1,8 +1,11 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
+import { router, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
-    links: Array,
+    links: {
+        type: Array,
+        required: true,
+    },
 });
 
 const visit = (url) => {
@@ -16,7 +19,7 @@ const visit = (url) => {
 
 <template>
     <div class="flex justify-center mt-6 space-x-1">
-        <button
+        <Link
             v-for="(link, index) in links"
             :key="index"
             v-html="link.label"

@@ -8,7 +8,7 @@ defineOptions({
     layout: AppLayout,
 });
 
-defineProps({
+const props = defineProps({
     expenses: {
         type: Object,
         required: true,
@@ -102,8 +102,8 @@ const onShow = (id) => {
 
         <!-- Pagination -->
         <div class="flex justify-center items-center mt-4 space-x-2">
-            <!-- Previous Button -->
-            <button
+            <Pagination :links="expenses" />
+            <!-- <button
                 :disabled="currentPage === 1"
                 @click="prevPage"
                 class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
@@ -111,7 +111,6 @@ const onShow = (id) => {
                 <i class="fas fa-angle-left"></i>
             </button>
 
-            <!-- Page Numbers -->
             <button
                 v-for="page in pagination.total"
                 :key="page"
@@ -126,14 +125,13 @@ const onShow = (id) => {
                 {{ page }}
             </button>
 
-            <!-- Next Button -->
             <button
                 :disabled="currentPage === totalPages"
                 @click="nextPage"
                 class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
             >
                 <i class="fas fa-angle-right"></i>
-            </button>
+            </button> -->
         </div>
     </div>
 </template>

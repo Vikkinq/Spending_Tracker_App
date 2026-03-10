@@ -50,8 +50,8 @@ const timeAgo = (date) => {
         <!-- Table Body -->
         <tbody class="divide-y divide-gray-100">
             <tr
-                v-for="expense in expenses"
-                :key="expense.id"
+                v-for="(expense, index) in expenses"
+                :key="index"
                 class="hover:bg-gray-50 transition hover:cursor-pointer"
             >
                 <td class="px-6 py-4 font-medium text-gray-800">
@@ -68,7 +68,7 @@ const timeAgo = (date) => {
                     {{ formatDate(expense.spent_on) }}
                 </td>
 
-                <td class="px-6 py-4 text-gray-600">
+                <td class="px-6 py-4 text-gray-600 text-xs">
                     {{ expense.notes ? expense.notes : "N/A" }}
                 </td>
 
