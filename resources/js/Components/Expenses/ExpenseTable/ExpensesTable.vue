@@ -43,7 +43,7 @@ const timeAgo = (date) => {
                 <th class="px-6 py-3">Notes</th>
                 <th class="px-6 py-3">Created</th>
                 <th class="px-6 py-3">Updated</th>
-                <th class="px-6 py-3 text-right">Action</th>
+                <th class="px-6 py-3 text-center">Action</th>
             </tr>
         </thead>
 

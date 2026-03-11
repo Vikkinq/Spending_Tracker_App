@@ -16,19 +16,44 @@ class ExpenseController extends Controller {
     // Index 
     public function index(Request $request){
         $user = Auth::user();
-        $expenses = $user->expenses()->with('category')->latest();
+        $expenses = $user->expenses()->with('category');
+
+            // SEARCH
+        if ($request->search) {
+            $expenses->where(function ($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                ->orWhere('amount', 'like', "%{$request->search}%");
+            });
+        }
+
+        // SORT
+        switch ($request->sort) {
+            case 'dateAsc':
+                $expenses->orderBy('spent_on', 'asc');
+                break;
+
+            case 'dateDesc':
+                $expenses->orderBy('spent_on', 'desc');
+                break;
+
+            case 'abcAsc':
+                $expenses->orderBy('title', 'asc');
+                break;
+
+            case 'abcDesc':
+                $expenses->orderBy('title', 'desc');
+                break;
+
+            default:
+                $expenses->latest();
+        }
 
         $paginatedExpenses = $expenses->paginate(10)->withQueryString();
 
         return Inertia::render('Spending/SpendingIndex', [
-            'expenses' => $paginatedExpenses->items(),
+            'expenses' => $paginatedExpenses,
             'user' => $user,
-            'pagination' => [
-                'total' => $paginatedExpenses->total(),
-                'per_page' => $paginatedExpenses->perPage(),
-                'current_page' => $paginatedExpenses->currentPage(),
-                'last_page' => $paginatedExpenses->lastPage(),
-            ]
+            'filters' => $request->only(['search', 'sort']),
         ]);
     }
 

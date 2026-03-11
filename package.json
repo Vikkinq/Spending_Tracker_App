@@ -21,6 +21,10 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "dayjs": "^1.11.19"
+        "@primeuix/themes": "^2.0.3",
+        "@primevue/forms": "^4.5.4",
+        "dayjs": "^1.11.19",
+        "primeicons": "^7.0.0",
+        "primevue": "^4.5.4"
     }
 }

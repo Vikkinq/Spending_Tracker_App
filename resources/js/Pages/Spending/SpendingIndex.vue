@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ExpensesTable from "@/Components/Expenses/ExpenseTable/ExpensesTable.vue";
 import Pagination from "@/Components/Global/Pagination.vue";
 import { router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
 defineOptions({
     layout: AppLayout,
@@ -14,7 +15,24 @@ const props = defineProps({
         required: true,
     },
     user: Object,
-    pagination: Object,
+    filters: Object,
+});
+
+const searchQuery = ref(props.filters.search || "");
+const sortOption = ref(props.filters.sort || "");
+
+watch([searchQuery, sortOption], ([search, sort]) => {
+    router.get(
+        "/spending",
+        {
+            search: search,
+            sort: sort,
+        },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
 });
 
 const onEdit = (id) => {
@@ -93,7 +111,7 @@ const onShow = (id) => {
             class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden"
         >
             <ExpensesTable
-                :expenses="expenses"
+                :expenses="expenses.data"
                 :onEdit="onEdit"
                 :onDelete="onDelete"
                 :onShow="onShow"
@@ -101,37 +119,6 @@ const onShow = (id) => {
         </div>
 
         <!-- Pagination -->
-        <div class="flex justify-center items-center mt-4 space-x-2">
-            <Pagination :links="expenses" />
-            <!-- <button
-                :disabled="currentPage === 1"
-                @click="prevPage"
-                class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            >
-                <i class="fas fa-angle-left"></i>
-            </button>
-
-            <button
-                v-for="page in pagination.total"
-                :key="page"
-                @click="goToPage(page)"
-                :class="[
-                    'px-3 py-1 rounded-lg border',
-                    currentPage === page
-                        ? 'bg-indigo-500 text-white border-indigo-500'
-                        : 'bg-white text-gray-700 hover:bg-gray-100',
-                ]"
-            >
-                {{ page }}
-            </button>
-
-            <button
-                :disabled="currentPage === totalPages"
-                @click="nextPage"
-                class="px-3 py-1 rounded-lg border bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            >
-                <i class="fas fa-angle-right"></i>
-            </button> -->
-        </div>
+        <Pagination :links="expenses.links" />
     </div>
 </template>

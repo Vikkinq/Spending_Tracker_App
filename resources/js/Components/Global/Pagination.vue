@@ -18,7 +18,7 @@ const visit = (url) => {
 </script>
 
 <template>
-    <div class="flex justify-center mt-6 space-x-1">
+    <div class="flex justify-end mt-6 space-x-1">
         <Link
             v-for="(link, index) in links"
             :key="index"
